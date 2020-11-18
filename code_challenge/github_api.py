@@ -12,7 +12,12 @@ class GitApi(object):
         self.password = password
         self.owner = owner
         self.access_token = access_token
-        self.oSession = requests.get(self.url, headers={'Authorization': "Token " + self.access_token}).json()
+        try:
+            self.oSession = requests.get(self.url, headers={'Authorization': "Token " + self.access_token}).json()
+            # Todo: a debug purpose to be removed
+            # print(self.oSession)
+        except requests.exceptions.BaseHTTPError as e:
+            print(e)
 
     def get_total_repo(self):
         """
@@ -47,7 +52,7 @@ class GitApi(object):
 
         return most_watcher_repo
 
-    def get_sorted_lst(self, bReverse=True, sort_key='updated_at', bDebug=True):
+    def get_sorted_lst(self, bReverse=True, sort_key='updated_at', bShow=True):
         """
         This function is return the list of sorted repository
 
@@ -57,8 +62,8 @@ class GitApi(object):
         """
         self.oSession.sort(key=lambda x: x[sort_key], reverse=bReverse)
         lst_sorted_repos = [repo['name'] for repo in self.oSession]
-        if bDebug:
+        if bShow:
             for repo in self.oSession:
-                print(repo['name'] + '::::: ' + repo[sort_key])
+                print('{}:{}:{}'.format(repo['name'], sort_key, repo[sort_key]))
 
         return lst_sorted_repos
