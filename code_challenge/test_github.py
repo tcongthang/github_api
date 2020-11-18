@@ -1,4 +1,4 @@
-from code_challenge.github_api import GitApi
+from code_challenge.handler.github_api import GitApi
 
 if __name__ == '__main__':
     print('Question - 2')

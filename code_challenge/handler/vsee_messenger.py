@@ -1,7 +1,7 @@
 from appium import webdriver
 import logging
 import time
-
+from code_challenge.handler.appium_server import AppiumServer
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,6 +15,10 @@ class SimpleVSeeMessengerTests(object):
         logger = logging.getLogger()
         # Setting the threshold of logger to DEBUG
         logger.setLevel(logging.INFO)
+        # Start Appium Server
+        appium_server = AppiumServer()
+        appium_server.start_server()
+
         self.logger = logging.info
         self.desired_caps = desired_caps
         self.user = user
@@ -29,7 +33,13 @@ class SimpleVSeeMessengerTests(object):
 
     def __openVsee(self):
 
+        # time.sleep(60)
         # TODO: Thang Truong should have the way to handle appium serve (auto-start, with ip, port ....)
+        # todo: Thang Truong - Should we have a better way? example of handle different port & server address
+        # appium_service = AppiumService()
+        # #set Path: https://www.qafox.com/appium-configuring-node-js-and-npm/
+        # appium_service.start()
+
         driver = webdriver.Remote(command_executor=self.executor, desired_capabilities=self.desired_caps)
         time.sleep(30)
         self.logger('INFO: driver.session_id %s' % driver.session_id)
@@ -56,31 +66,6 @@ class SimpleVSeeMessengerTests(object):
         btn_Sign_in.click()
         time.sleep(20)
         # self.__waitforelement(type=By.CLASS_NAME, element=self.locator.csWelcome)
-
-    # def test_home_screen(self):
-    #     self.logger('Check to make sure new contact/group icon is shown')
-    #     add_icon = self.driver.find_element_by_id('com.vsee.vsee.beta:id/action_add')
-    #     self.assertEqual(add_icon.tag_name, 'Add Contact/Group')
-    #
-    #     self.logger('Check to make sure Chats tab icon is shown')
-    #
-    #     self.driver.find_element_by_accessibility_id(self.locator.idChats)
-    #     self.driver.find_element_by_xpath(self.locator.xpChats)
-    #     self.logger('Check to make sure the Calls tab icon is shown')
-    #
-    #     self.driver.find_element_by_accessibility_id(self.locator.idCalls)
-    #     self.driver.find_element_by_xpath(self.locator.xpCalls)
-    #     self.logger('Check to make sure the Contacts tab icon is shown')
-    #
-    #     self.driver.find_element_by_accessibility_id(self.locator.idContacts)
-    #     self.driver.find_element_by_xpath(self.locator.xpContacts)
-    #     self.logger('Check to make sure the More icon is shown')
-    #
-    #     self.driver.find_element_by_accessibility_id(self.locator.idMore)
-    #     self.driver.find_element_by_xpath(self.locator.xpMore)
-    #
-    #     self.logger('Check to make sure the Search Contacts box is shown')
-    #     self.driver.find_element_by_id(self.locator.idSearch)
 
     def switchtoContacts(self):
         self.driver.find_element_by_xpath(self.locator.xpContacts).click()
@@ -163,12 +148,39 @@ class SimpleVSeeMessengerTests(object):
         time.sleep(5)
         oElement.click()
 
+    ######### On-going function ###################
     def __waitforelement(self, type, element):
         # try:
         WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((type, element)))
         #
         # finally:
         #     self.driver.quit()
+
+
+    # def test_home_screen(self):
+    #     self.logger('Check to make sure new contact/group icon is shown')
+    #     add_icon = self.driver.find_element_by_id('com.vsee.vsee.beta:id/action_add')
+    #     self.assertEqual(add_icon.tag_name, 'Add Contact/Group')
+    #
+    #     self.logger('Check to make sure Chats tab icon is shown')
+    #
+    #     self.driver.find_element_by_accessibility_id(self.locator.idChats)
+    #     self.driver.find_element_by_xpath(self.locator.xpChats)
+    #     self.logger('Check to make sure the Calls tab icon is shown')
+    #
+    #     self.driver.find_element_by_accessibility_id(self.locator.idCalls)
+    #     self.driver.find_element_by_xpath(self.locator.xpCalls)
+    #     self.logger('Check to make sure the Contacts tab icon is shown')
+    #
+    #     self.driver.find_element_by_accessibility_id(self.locator.idContacts)
+    #     self.driver.find_element_by_xpath(self.locator.xpContacts)
+    #     self.logger('Check to make sure the More icon is shown')
+    #
+    #     self.driver.find_element_by_accessibility_id(self.locator.idMore)
+    #     self.driver.find_element_by_xpath(self.locator.xpMore)
+    #
+    #     self.logger('Check to make sure the Search Contacts box is shown')
+    #     self.driver.find_element_by_id(self.locator.idSearch)
 
 class Locators(object):
     """
